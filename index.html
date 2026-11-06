@@ -145,86 +145,153 @@ body.brume::after {
 </head>
 <body class="brume" data-pan="marque">
 <style>
-.page { max-width: 560px; margin: 0 auto; padding: 48px 20px 80px; display: grid; gap: 18px; }
-.zh { font-size: 1.04em; }
+:root { --neon-1:#FF2D95; --neon-2:#22D3EE; --neon-3:#8B5CF6; --neon-4:#FF8A1F; --neon-5:#FFE14D; }
+.lumieres { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.lumieres i { position: absolute; border-radius: 50%; filter: blur(80px); opacity: .55; mix-blend-mode: screen; }
+.lumieres i:nth-child(1) { width: 420px; height: 420px; background: var(--neon-1); top: -120px; right: -140px; animation: flotte 16s ease-in-out infinite alternate; }
+.lumieres i:nth-child(2) { width: 380px; height: 380px; background: var(--neon-2); top: 30%; left: -180px; animation: flotte 20s ease-in-out infinite alternate-reverse; }
+.lumieres i:nth-child(3) { width: 460px; height: 460px; background: var(--neon-3); bottom: -180px; right: -120px; animation: flotte 24s ease-in-out infinite alternate; }
+.lumieres i:nth-child(4) { width: 260px; height: 260px; background: var(--neon-4); top: 58%; right: 10%; opacity: .35; animation: flotte 18s ease-in-out infinite alternate-reverse; }
+@keyframes flotte { to { transform: translate(-70px, 90px) scale(1.18); } }
+
+.page { position: relative; z-index: 1; max-width: 560px; margin: 0 auto; padding: 44px 18px 80px; display: grid; gap: 18px; }
 .en { color: var(--texte-2); font-size: 14px; }
-h1 { font-size: clamp(34px, 9vw, 46px); line-height: 1.05; margin: 6px 0 0; letter-spacing: -0.03em; font-weight: 650; }
-h2 { font-size: 20px; margin: 0; letter-spacing: -0.02em; font-weight: 620; }
 p { margin: 0; }
+h1 { font-size: clamp(36px, 10vw, 50px); line-height: 1.05; margin: 4px 0 0; letter-spacing: -0.03em; font-weight: 750; }
+h2 { font-size: 22px; margin: 0; letter-spacing: -0.02em; font-weight: 700; }
+.degrade { background: linear-gradient(90deg, var(--neon-1), var(--neon-5), var(--neon-2), var(--neon-3), var(--neon-1)); background-size: 300% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: coule 8s linear infinite; }
+@keyframes coule { to { background-position: 300% 0; } }
+
+/* Carte néon : bordure en dégradé qui tourne, comme une devanture */
+@property --angle { syntax: "<angle>"; initial-value: 0deg; inherits: false; }
+.neon { position: relative; border-radius: 22px; padding: 1.5px; background: conic-gradient(from var(--angle), var(--neon-1), var(--neon-4), var(--neon-5), var(--neon-2), var(--neon-3), var(--neon-1)); animation: tourne 6s linear infinite; box-shadow: 0 0 28px color-mix(in srgb, var(--neon-1) 30%, transparent), 0 0 60px color-mix(in srgb, var(--neon-2) 18%, transparent); }
+@keyframes tourne { to { --angle: 360deg; } }
+.neon > .verre { border: 0; border-radius: 21px; }
 .carte { padding: 20px; display: grid; gap: 10px; }
+
 .chiffres { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-.chiffre { padding: 16px 10px; text-align: center; display: grid; gap: 2px; }
-.chiffre b { font-size: 26px; font-weight: 650; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
-.chiffre span { font: 500 10.5px/1.3 var(--police-mono); letter-spacing: var(--suivi); text-transform: uppercase; color: var(--texte-3); }
-.total { text-align: center; font-size: 15px; }
-.total b { font-size: 22px; }
+.chiffre { padding: 16px 6px; text-align: center; display: grid; gap: 2px; border-radius: 18px; }
+.chiffre b { font-size: 30px; font-weight: 750; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+.chiffre:nth-child(1) b { color: var(--neon-1); text-shadow: 0 0 18px var(--neon-1); }
+.chiffre:nth-child(2) b { color: var(--neon-5); text-shadow: 0 0 18px var(--neon-4); }
+.chiffre:nth-child(3) b { color: var(--neon-2); text-shadow: 0 0 18px var(--neon-2); }
+.chiffre span { font: 600 10.5px/1.3 var(--police-mono); letter-spacing: var(--suivi); text-transform: uppercase; color: var(--texte-2); }
+.total { text-align: center; }
+.total .gros { font-size: 40px; font-weight: 800; letter-spacing: -0.03em; }
 .marques { display: flex; flex-wrap: wrap; gap: 8px; }
-.marques span { padding: 7px 13px; border-radius: 999px; border: 1px solid var(--filet); background: rgba(255,255,255,.05); font-weight: 600; font-size: 14px; }
+.marques span { padding: 8px 14px; border-radius: 999px; font-weight: 650; font-size: 14px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.14); box-shadow: 0 0 14px color-mix(in srgb, var(--neon-3) 30%, transparent); }
+
+.equipe { display: grid; gap: 12px; }
+.membre { display: grid; grid-template-columns: 54px 1fr; gap: 14px; align-items: center; }
+.avatar { width: 54px; height: 54px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; font-size: 20px; color: #fff; position: relative; overflow: hidden; }
+.avatar::after { content: ""; position: absolute; inset: 0; background-image: var(--bruit); background-size: 120px; opacity: .5; mix-blend-mode: soft-light; }
+.a1 { background: radial-gradient(circle at 30% 30%, #FFB3D9, var(--neon-1) 55%, #7A0A45); box-shadow: 0 0 24px var(--neon-1); }
+.a2 { background: radial-gradient(circle at 30% 30%, #B8F4FF, var(--neon-2) 55%, #0A4F66); box-shadow: 0 0 24px var(--neon-2); }
+.a3 { background: radial-gradient(circle at 30% 30%, #FFE7A8, var(--neon-4) 55%, #7A3300); box-shadow: 0 0 24px var(--neon-4); }
+.membre b { font-size: 16px; }
+
 .point { display: grid; grid-template-columns: 14px 1fr; gap: 12px; align-items: start; padding: 10px 0; border-top: 1px solid var(--filet); }
 .point:first-of-type { border-top: 0; }
-.point .orbe { margin-top: 6px; }
-.apparait { opacity: 0; transform: translateY(14px); transition: opacity .7s var(--ressort), transform .7s var(--ressort); }
+.pastille-neon { width: 12px; height: 12px; border-radius: 50%; margin-top: 6px; animation: souffle 3.5s ease-in-out infinite; }
+
+.reseau { display: grid; gap: 12px; }
+.capture { width: 100%; border-radius: 14px; display: block; border: 1px solid rgba(255,255,255,.12); }
+.scan { display: grid; grid-template-columns: 92px 1fr; gap: 14px; align-items: center; }
+.scan img { width: 92px; height: 92px; border-radius: 10px; background: #fff; padding: 4px; box-sizing: border-box; }
+.scan b { font-size: 17px; }
+
+.apparait { opacity: 0; transform: translateY(16px) scale(.98); transition: opacity .8s var(--ressort), transform .8s var(--ressort); }
 .apparait.vu { opacity: 1; transform: none; }
-.orbe-grand { width: 58px; height: 58px; --d: 58px; animation: souffle 5s ease-in-out infinite; }
-.pied { text-align: center; color: var(--texte-3); font-size: 12.5px; margin-top: 12px; }
-@media (prefers-reduced-motion: reduce) { .apparait { opacity: 1; transform: none; transition: none; } }
+.orbe-grand { --d: 64px; width: 64px; height: 64px; background: conic-gradient(from 0deg, var(--neon-1), var(--neon-5), var(--neon-2), var(--neon-3), var(--neon-1)); animation: tourne-orbe 10s linear infinite; box-shadow: 0 0 50px var(--neon-1), 0 0 90px var(--neon-2); }
+@keyframes tourne-orbe { to { transform: rotate(360deg); } }
+.pied { text-align: center; color: var(--texte-3); font-size: 12.5px; margin-top: 10px; }
+@media (prefers-reduced-motion: reduce) { .apparait { opacity: 1; transform: none; transition: none; } .lumieres i, .neon, .degrade, .orbe-grand { animation: none; } }
 </style>
+
+<div class="lumieres" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
 
 <main class="page">
   <header class="apparait" style="display:grid;gap:12px">
     <span class="orbe orbe-grand"></span>
     <span class="etiquette">ADV · Paris · 2026</span>
-    <h1>你好，我是 Damien</h1>
-    <p class="zh">法国时尚与球鞋内容创作者，也是服装品牌 <strong>ADV</strong> 的创始人。</p>
-    <p class="en">Hello, I'm Damien Roussel: a French fashion and sneaker creator, and the founder of the clothing brand ADV.</p>
+    <h1>你好，我是 <span class="degrade">Damien</span></h1>
+    <p>法国时尚与球鞋内容创作者，服装品牌 <strong>ADV</strong> 的创始人。</p>
+    <p class="en">Hello, I'm Damien Roussel: French fashion and sneaker creator, founder of the clothing brand ADV.</p>
   </header>
 
   <section class="apparait">
     <div class="chiffres">
-      <div class="verre chiffre"><b data-n="240">0</b><span>K+ TikTok</span></div>
-      <div class="verre chiffre"><b data-n="100">0</b><span>K+ Instagram</span></div>
-      <div class="verre chiffre"><b data-n="40">0</b><span>K YouTube</span></div>
+      <div class="verre chiffre"><b data-n="246.7">0</b><span>K · TikTok</span></div>
+      <div class="verre chiffre"><b data-n="101">0</b><span>K · Instagram</span></div>
+      <div class="verre chiffre"><b data-n="41.7">0</b><span>K · YouTube</span></div>
     </div>
   </section>
-  <p class="total apparait">超过 <b>38 万</b> 粉丝，主要是法国 18 至 30 岁、热爱服装的年轻男性。<br><span class="en">380,000+ followers, mostly young men in France (18 to 30) who love clothes.</span></p>
+
+  <div class="neon apparait"><div class="verre carte total">
+    <span class="gros degrade">近 39 万粉丝</span>
+    <p>TikTok 上获得 <strong>890 万</strong>个赞。粉丝主要是法国 18 至 30 岁、热爱服装的年轻人。</p>
+    <p class="en">Almost 390,000 followers and 8.9 million likes on TikTok. Mostly young people in France (18 to 30) who love clothes.</p>
+  </div></div>
 
   <section class="verre carte apparait">
     <span class="etiquette">合作过的品牌 · Brands I've worked with</span>
-    <div class="marques">
-      <span>Uniqlo</span><span>New Balance</span><span>The North Face</span><span>Casio G-SHOCK</span><span>On</span><span>JD Sports</span>
-    </div>
-    <p class="en">Paid collaborations: these brands pay me to present their products to my audience.</p>
+    <div class="marques"><span>Uniqlo</span><span>New Balance</span><span>The North Face</span><span>Casio G-SHOCK</span><span>On</span><span>JD Sports</span></div>
+    <p class="en">These brands pay me to present their products to my audience.</p>
   </section>
 
   <section class="verre carte apparait">
     <span class="etiquette">我的故事 · My story</span>
-    <p class="zh">我 16 岁开始在网上买卖衣服，一直在寻找“价格与价值之间的差距”。今天我的视频告诉大家：什么衣服真正值得买。</p>
-    <p class="en">I started buying and selling clothes online at 16. My whole work is about the gap between what a piece costs and what it is really worth. My videos tell people which clothes are truly worth buying.</p>
+    <p>我 16 岁开始在网上买卖衣服，一直在寻找“价格与价值之间的差距”。今天我的视频告诉大家：什么衣服真正值得买。</p>
+    <p class="en">I started buying and selling clothes online at 16. My work is about the gap between what a piece costs and what it is really worth: my videos tell people which clothes are truly worth buying.</p>
   </section>
 
+  <div class="neon apparait"><section class="verre carte">
+    <span class="etiquette">我们的团队 · Our team</span>
+    <h2>三个人，已经准备好启动</h2>
+    <p class="en">A team of three, ready to launch.</p>
+    <div class="equipe">
+      <div class="membre"><span class="avatar a1">D</span><div><b>Damien</b><p>创始人，内容创作者，品牌的面孔。</p><p class="en">Founder, creator, the face of the brand.</p></div></div>
+      <div class="membre"><span class="avatar a2">E</span><div><b>Emilio</b><p>我的左膀右臂。我们一起制作所有视频，并计划成为 ADV 的合伙人。</p><p class="en">My right-hand man. We make all the videos together, and we plan to become partners in ADV.</p></div></div>
+      <div class="membre"><span class="avatar a3">A</span><div><b>Alexi</b><p>设计师，负责品牌形象和技术资料。</p><p class="en">Designer: brand image and tech packs.</p></div></div>
+    </div>
+  </section></div>
+
   <section class="verre carte apparait">
-    <span class="etiquette">我们在中国做什么 · Why we are here</span>
+    <span class="etiquette">为什么来中国 · Why we are here</span>
     <h2>寻找长期的生产伙伴</h2>
-    <p class="en">We are looking for long-term manufacturing partners.</p>
-    <p class="zh">我们正在走访工厂，为 ADV 寻找可靠的伙伴：裤子、皮带、钱包、卫衣、牛仔裤。我们重视质量，追求合理的价格和长期合作。</p>
-    <p class="en">We are visiting factories to find reliable partners for ADV: trousers, belts, wallets, hoodies, jeans. Quality first, a fair price, and a relationship that lasts.</p>
+    <p>我们正在走访工厂，为 ADV 寻找可靠的伙伴：裤子、皮带、钱包、卫衣、牛仔裤。我们也在社交媒体上记录这次旅行：社交媒体目前是我们的主要工作。</p>
+    <p class="en">We are visiting factories to find reliable partners for ADV: trousers, belts, wallets, hoodies, jeans. We also document this trip on social media, which is our main activity for now.</p>
   </section>
 
-  <section class="verre carte apparait">
-    <span class="etiquette">和我们合作的好处 · What we bring you</span>
-    <div class="point"><span class="orbe" data-etat="travaille"></span><div><p class="zh"><strong>现成的买家。</strong>我们的产品直接卖给已经关注我们的社群，不用从零开始。</p><p class="en">Ready buyers: our products go straight to an audience that already follows us.</p></div></div>
-    <div class="point"><span class="orbe"></span><div><p class="zh"><strong>持续的订单。</strong>每一季都有新系列，卖得好的款式会返单。</p><p class="en">Regular orders: a new drop every season, and reorders on what sells.</p></div></div>
-    <div class="point"><span class="orbe"></span><div><p class="zh"><strong>简单的客户。</strong>清晰的技术资料、快速确认、按时付款、一个联系人。</p><p class="en">An easy client: clear tech packs, quick decisions, payment on time, one contact.</p></div></div>
-    <div class="point"><span class="orbe"></span><div><p class="zh"><strong>曝光度。</strong>经您同意，我们可以向数十万观众展示产品的制作过程。</p><p class="en">Visibility: with your agreement, we can show how the products are made to hundreds of thousands of viewers.</p></div></div>
+  <div class="neon apparait"><section class="verre carte">
+    <span class="etiquette">我们的承诺 · What we bring you</span>
+    <div class="point"><span class="pastille-neon" style="background:var(--neon-1);box-shadow:0 0 14px var(--neon-1)"></span><div><p><strong>我们坦诚：</strong>刚开始的订单不一定很大。</p><p class="en">To be honest: our first orders will not necessarily be big.</p></div></div>
+    <div class="point"><span class="pastille-neon" style="background:var(--neon-5);box-shadow:0 0 14px var(--neon-4)"></span><div><p><strong>但潜力巨大。</strong>凭借 Damien 的影响力，这个项目有很大的机会走红、获得成功。</p><p class="en">But the potential is huge: thanks to Damien's audience, this project has a strong chance to go viral and succeed.</p></div></div>
+    <div class="point"><span class="pastille-neon" style="background:var(--neon-2);box-shadow:0 0 14px var(--neon-2)"></span><div><p><strong>项目已经成型。</strong>整个计划我们已经想好了，三人团队随时可以开始。</p><p class="en">The whole project is already planned, and our team of three is ready to start.</p></div></div>
+    <div class="point"><span class="pastille-neon" style="background:var(--neon-3);box-shadow:0 0 14px var(--neon-3)"></span><div><p><strong>简单的客户。</strong>清晰的技术资料、快速确认、按时付款、一个联系人。</p><p class="en">An easy client: clear tech packs, quick decisions, payment on time, one contact.</p></div></div>
+  </section></div>
+
+  <section class="apparait" style="display:grid;gap:14px">
+    <h2 style="text-align:center">扫码关注我 <span class="en" style="display:block;font-size:14px;font-weight:400;margin-top:4px">Scan to follow me</span></h2>
+
+    <div class="verre carte reseau">
+      <img class="capture" src="img/tiktok.jpg" alt="TikTok 主页：24.67 万粉丝，890 万赞">
+      <div class="scan"><img src="img/qr-tiktok.png" alt="TikTok 二维码"><div><b>TikTok（抖音海外版）</b><p>扫码关注 @damien.rsl</p><p class="en">24.67 万粉丝 · 246.7K followers</p></div></div>
+    </div>
+    <div class="verre carte reseau">
+      <img class="capture" src="img/instagram.jpg" alt="Instagram 主页：10.1 万粉丝">
+      <div class="scan"><img src="img/qr-instagram.png" alt="Instagram 二维码"><div><b>Instagram</b><p>扫码关注 @damien.rsl</p><p class="en">10.1 万粉丝 · 101K followers</p></div></div>
+    </div>
+    <div class="verre carte reseau">
+      <img class="capture" src="img/youtube.jpg" alt="YouTube 频道：4.17 万订阅">
+      <div class="scan"><img src="img/qr-youtube.png" alt="YouTube 二维码"><div><b>YouTube</b><p>扫码订阅 @damien_rsl</p><p class="en">4.17 万订阅 · 41.7K subscribers</p></div></div>
+    </div>
   </section>
 
-  <section class="verre carte apparait" style="text-align:center">
-    <span class="etiquette">找到我 · Find me</span>
-    <p style="font-size:18px;font-weight:600">Instagram · TikTok : @damien.rsl</p>
-    <p class="en">YouTube : Damien Roussel</p>
-    <p class="zh">谢谢您的时间，期待合作！</p>
+  <div class="neon apparait"><section class="verre carte" style="text-align:center">
+    <p style="font-size:20px;font-weight:700" class="degrade">谢谢您的时间，期待合作！</p>
     <p class="en">Thank you for your time. We look forward to working together.</p>
-  </section>
+  </section></div>
 
   <p class="pied">ADV · Damien Roussel · Paris</p>
 </main>
@@ -233,12 +300,12 @@ p { margin: 0; }
 (function () {
   var vu = function (el) { el.classList.add("vu"); };
   if ("IntersectionObserver" in window) {
-    var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { vu(e.target); io.unobserve(e.target); } }); }, { threshold: 0.15 });
+    var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { vu(e.target); io.unobserve(e.target); } }); }, { threshold: 0.12 });
     document.querySelectorAll(".apparait").forEach(function (el) { io.observe(el); });
   } else { document.querySelectorAll(".apparait").forEach(vu); }
   document.querySelectorAll("[data-n]").forEach(function (b) {
-    var fin = +b.getAttribute("data-n"), t0 = null;
-    function pas(t) { if (!t0) t0 = t; var k = Math.min(1, (t - t0) / 1400); b.textContent = Math.round(fin * (1 - Math.pow(1 - k, 3))); if (k < 1) requestAnimationFrame(pas); }
+    var fin = parseFloat(b.getAttribute("data-n")), dec = fin % 1 ? 1 : 0, t0 = null;
+    function pas(t) { if (!t0) t0 = t; var k = Math.min(1, (t - t0) / 1600); b.textContent = (fin * (1 - Math.pow(1 - k, 3))).toFixed(dec); if (k < 1) requestAnimationFrame(pas); }
     setTimeout(function () { requestAnimationFrame(pas); }, 300);
   });
 })();
