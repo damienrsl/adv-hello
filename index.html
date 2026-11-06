@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Damien Roussel · ADV</title>
+<style>/* ──────────────────────────────────────────────────────────────────────────────
+   Brume · le kit ARTEFACTS (06/11/2026). À coller en tête de toute page publiée en artefact.
+   Pourquoi : retour de Damien du 06/11 : « l'Encart, je l'ai validé ; les artefacts, c'est beau mais c'est blanc.
+   Plus de grain, plus de texture, cohérent avec la taskbar. »
+   Ce qui change par rapport à tokens.css :
+     1. TOUJOURS sombre. Plus de bascule en clair quand l'appareil est en clair (c'était la cause du blanc).
+        Le clair n'existe que si on le force : <html data-theme="light">, et seulement sur sa demande.
+     2. Le grain se VOIT : 14 % sur le fond (au lieu de 5 %), 10 % dans le verre, 30 % dans les orbes (comme l'île).
+     3. Le fond reprend l'île : nuit #070A12 + nappe bleu nuit permanente en bas + halo du pan + vignette.
+   Pan de la page : <body data-pan="contenu|perso|business|marque">. Une seule teinte vive par page.
+   ────────────────────────────────────────────────────────────────────────────── */
+
+:root {
+  color-scheme: dark;
+  --encre: #000000;
+  --fond: #070A12;
+  --nappe: #1C3370;             /* le bleu nuit permanent du bas de l'île */
+  --surface: #0F131C;
+  --surface-haute: #161B26;
+  --filet: rgba(255, 255, 255, 0.08);
+  --reflet: rgba(255, 255, 255, 0.14);
+  --texte: #F4F5F7;
+  --texte-2: rgba(244, 245, 247, 0.62);
+  --texte-3: rgba(244, 245, 247, 0.38);
+
+  --contenu: #FF4D1F;  --contenu-2: #FF2D55;  --contenu-3: #FFB347;
+  --perso: #F0628E;    --perso-2: #8E1F4F;    --perso-3: #FFC4D6;
+  --business: #2F6BFF; --business-2: #0B2A8F; --business-3: #7CC0FF;
+  --marque: #8B5CF6;   --marque-2: #4C1D95;   --marque-3: #E3A6FF;
+  --pan: var(--business); --pan-2: var(--business-2); --pan-3: var(--business-3);
+
+  --verre: rgba(18, 23, 36, 0.72);
+  --verre-dense: rgba(10, 14, 23, 0.9);
+  --verre-flou: blur(30px) saturate(160%);
+
+  /* Le grain : un bruit monochrome en incrustation. C'est lui qui fait « photo », pas plastique. */
+  --bruit: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncR type='linear' slope='1.7' intercept='-.2'/%3E%3CfeFuncG type='linear' slope='1.7' intercept='-.2'/%3E%3CfeFuncB type='linear' slope='1.7' intercept='-.2'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --grain-fond: 0.11;   /* fondu normal : sur la nuit, l'incrustation ne se voit pas */
+  --grain-verre: 0.07;
+  --grain-orbe: 0.55;
+
+  --r-s: 10px; --r-m: 14px; --r-l: 20px; --r-xl: 28px; --r-pilule: 999px;
+  --police: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", system-ui, sans-serif;
+  --police-mono: ui-monospace, "SF Mono", Menlo, monospace;
+  --suivi: 0.08em;
+  --ombre: 0 18px 60px rgba(0, 0, 0, 0.55);
+  --ressort: cubic-bezier(.32, .72, .25, 1);
+}
+[data-pan="contenu"]  { --pan: var(--contenu);  --pan-2: var(--contenu-2);  --pan-3: var(--contenu-3); }
+[data-pan="perso"]    { --pan: var(--perso);    --pan-2: var(--perso-2);    --pan-3: var(--perso-3); }
+[data-pan="business"] { --pan: var(--business); --pan-2: var(--business-2); --pan-3: var(--business-3); }
+[data-pan="marque"]   { --pan: var(--marque);   --pan-2: var(--marque-2);   --pan-3: var(--marque-3); }
+
+/* Le fond : nuit, nappe bleue en bas, halo du pan en haut à droite, son profond en bas à gauche, vignette, grain. */
+html, body { background: var(--fond); color: var(--texte); }
+body.brume {
+  font: 15px/1.55 var(--police);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100%;
+  background:
+    radial-gradient(70% 55% at 50% 115%, color-mix(in srgb, var(--nappe) 60%, transparent), transparent 70%),
+    radial-gradient(55% 45% at 92% -5%, color-mix(in srgb, var(--pan) 34%, transparent), transparent 70%),
+    radial-gradient(45% 40% at -5% 75%, color-mix(in srgb, var(--pan-2) 30%, transparent), transparent 70%),
+    radial-gradient(120% 90% at 50% 40%, transparent 55%, rgba(0, 0, 0, 0.55) 100%),
+    var(--fond);
+  background-attachment: fixed;
+  transition: background 0.4s var(--ressort);
+}
+body.brume::after {
+  content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 100;
+  background-image: var(--bruit); background-size: 220px;
+  opacity: var(--grain-fond); mix-blend-mode: soft-light;
+}
+
+/* Le verre : fond dense, halo du pan au bas de la carte, grain dedans, reflet en haut. */
+.verre {
+  position: relative; isolation: isolate; overflow: hidden;
+  background:
+    radial-gradient(90% 70% at 85% 120%, color-mix(in srgb, var(--pan) 22%, transparent), transparent 70%),
+    var(--verre-dense);
+  -webkit-backdrop-filter: var(--verre-flou); backdrop-filter: var(--verre-flou);
+  border: 1px solid var(--filet);
+  border-radius: var(--r-l);
+  box-shadow: inset 0 1px 0 var(--reflet), var(--ombre);
+}
+.verre::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background-image: var(--bruit); background-size: 220px; opacity: var(--grain-verre); mix-blend-mode: screen;
+}
+.verre.calme { background: var(--verre-dense); }   /* sans halo : une carte d'info */
+
+/* L'orbe : la seule façon de mettre de la couleur. Sphère du dégradé, grainée, reflet, lueur. */
+.orbe {
+  --d: 12px;
+  position: relative; display: inline-block; flex: none; width: var(--d); height: var(--d); border-radius: 50%;
+  background: radial-gradient(circle at 34% 30%, var(--pan-3), var(--pan) 48%, var(--pan-2) 100%);
+  box-shadow: 0 0 calc(var(--d) * 0.9) color-mix(in srgb, var(--pan) 45%, transparent);
+  overflow: hidden; vertical-align: middle;
+}
+.orbe::before { /* grain */
+  content: ""; position: absolute; inset: 0; background-image: var(--bruit); background-size: 160px;
+  opacity: var(--grain-orbe); mix-blend-mode: soft-light;
+}
+.orbe::after { /* reflet */
+  content: ""; position: absolute; width: 40%; height: 26%; left: 20%; top: 14%; border-radius: 50%;
+  background: rgba(255, 255, 255, 0.55); filter: blur(calc(var(--d) * 0.05));
+}
+.orbe[data-etat="bloque"] { --d: 15px; box-shadow: 0 0 calc(var(--d) * 1.2) color-mix(in srgb, var(--pan) 80%, transparent); }
+.orbe[data-etat="attend"] { --d: 9px; opacity: .7; box-shadow: none; }
+.orbe[data-etat="travaille"] { animation: souffle 4s ease-in-out infinite; }
+.orbe[data-etat="fait"] { opacity: .35; filter: saturate(.4); }
+@keyframes souffle { 50% { transform: scale(1.14); filter: brightness(1.15); } }
+
+/* Texte */
+.etiquette { font: 500 10.5px/1.4 var(--police-mono); letter-spacing: var(--suivi); text-transform: uppercase; color: var(--texte-3); }
+.titre { font-weight: 600; letter-spacing: -0.02em; text-wrap: balance; }
+.second { color: var(--texte-2); }
+
+/* Boutons : pilule lumineuse du pan (principal), verre (secondaire). Aucun picto. */
+.bouton {
+  font: 600 14px/1 var(--police); color: #fff; padding: 12px 20px; border-radius: var(--r-pilule); border: 0; cursor: pointer;
+  background: linear-gradient(135deg, var(--pan), var(--pan-2));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .25), 0 0 32px color-mix(in srgb, var(--pan) 40%, transparent);
+  transition: transform .22s var(--ressort);
+}
+.bouton.verre-btn { background: rgba(255, 255, 255, 0.06); border: 1px solid var(--filet); box-shadow: inset 0 1px 0 var(--reflet); color: var(--texte); }
+.bouton:hover { transform: scale(1.03); } .bouton:active { transform: scale(0.96); }
+.bouton:focus-visible { outline: 2px solid var(--pan-3); outline-offset: 3px; }
+
+/* Le clair, seulement s'il est demandé (data-theme="light") : papier froid, grain gardé. */
+:root[data-theme="light"] {
+  color-scheme: light; --fond: #EEF0F4; --nappe: #C9D6F2; --texte: #0B0C10; --texte-2: rgba(11,12,16,.62); --texte-3: rgba(11,12,16,.4);
+  --filet: rgba(7,8,11,.08); --reflet: rgba(255,255,255,.9); --verre-dense: rgba(255,255,255,.82); --grain-fond: .10; --ombre: 0 18px 50px rgba(15,18,30,.14);
+}
+
+@media (prefers-reduced-motion: reduce) { .orbe, .bouton { animation: none !important; transition: none !important; } }
+
+:root{--police:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Helvetica Neue",sans-serif;}</style>
+</head>
+<body class="brume" data-pan="marque">
+<style>
+.page { max-width: 560px; margin: 0 auto; padding: 48px 20px 80px; display: grid; gap: 18px; }
+.zh { font-size: 1.04em; }
+.en { color: var(--texte-2); font-size: 14px; }
+h1 { font-size: clamp(34px, 9vw, 46px); line-height: 1.05; margin: 6px 0 0; letter-spacing: -0.03em; font-weight: 650; }
+h2 { font-size: 20px; margin: 0; letter-spacing: -0.02em; font-weight: 620; }
+p { margin: 0; }
+.carte { padding: 20px; display: grid; gap: 10px; }
+.chiffres { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.chiffre { padding: 16px 10px; text-align: center; display: grid; gap: 2px; }
+.chiffre b { font-size: 26px; font-weight: 650; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+.chiffre span { font: 500 10.5px/1.3 var(--police-mono); letter-spacing: var(--suivi); text-transform: uppercase; color: var(--texte-3); }
+.total { text-align: center; font-size: 15px; }
+.total b { font-size: 22px; }
+.marques { display: flex; flex-wrap: wrap; gap: 8px; }
+.marques span { padding: 7px 13px; border-radius: 999px; border: 1px solid var(--filet); background: rgba(255,255,255,.05); font-weight: 600; font-size: 14px; }
+.point { display: grid; grid-template-columns: 14px 1fr; gap: 12px; align-items: start; padding: 10px 0; border-top: 1px solid var(--filet); }
+.point:first-of-type { border-top: 0; }
+.point .orbe { margin-top: 6px; }
+.apparait { opacity: 0; transform: translateY(14px); transition: opacity .7s var(--ressort), transform .7s var(--ressort); }
+.apparait.vu { opacity: 1; transform: none; }
+.orbe-grand { width: 58px; height: 58px; --d: 58px; animation: souffle 5s ease-in-out infinite; }
+.pied { text-align: center; color: var(--texte-3); font-size: 12.5px; margin-top: 12px; }
+@media (prefers-reduced-motion: reduce) { .apparait { opacity: 1; transform: none; transition: none; } }
+</style>
+
+<main class="page">
+  <header class="apparait" style="display:grid;gap:12px">
+    <span class="orbe orbe-grand"></span>
+    <span class="etiquette">ADV · Paris · 2026</span>
+    <h1>你好，我是 Damien</h1>
+    <p class="zh">法国时尚与球鞋内容创作者，也是服装品牌 <strong>ADV</strong> 的创始人。</p>
+    <p class="en">Hello, I'm Damien Roussel: a French fashion and sneaker creator, and the founder of the clothing brand ADV.</p>
+  </header>
+
+  <section class="apparait">
+    <div class="chiffres">
+      <div class="verre chiffre"><b data-n="240">0</b><span>K+ TikTok</span></div>
+      <div class="verre chiffre"><b data-n="100">0</b><span>K+ Instagram</span></div>
+      <div class="verre chiffre"><b data-n="40">0</b><span>K YouTube</span></div>
+    </div>
+  </section>
+  <p class="total apparait">超过 <b>38 万</b> 粉丝，主要是法国 18 至 30 岁、热爱服装的年轻男性。<br><span class="en">380,000+ followers, mostly young men in France (18 to 30) who love clothes.</span></p>
+
+  <section class="verre carte apparait">
+    <span class="etiquette">合作过的品牌 · Brands I've worked with</span>
+    <div class="marques">
+      <span>Uniqlo</span><span>New Balance</span><span>The North Face</span><span>Casio G-SHOCK</span><span>On</span><span>JD Sports</span>
+    </div>
+    <p class="en">Paid collaborations: these brands pay me to present their products to my audience.</p>
+  </section>
+
+  <section class="verre carte apparait">
+    <span class="etiquette">我的故事 · My story</span>
+    <p class="zh">我 16 岁开始在网上买卖衣服，一直在寻找“价格与价值之间的差距”。今天我的视频告诉大家：什么衣服真正值得买。</p>
+    <p class="en">I started buying and selling clothes online at 16. My whole work is about the gap between what a piece costs and what it is really worth. My videos tell people which clothes are truly worth buying.</p>
+  </section>
+
+  <section class="verre carte apparait">
+    <span class="etiquette">我们在中国做什么 · Why we are here</span>
+    <h2>寻找长期的生产伙伴</h2>
+    <p class="en">We are looking for long-term manufacturing partners.</p>
+    <p class="zh">我们正在走访工厂，为 ADV 寻找可靠的伙伴：裤子、皮带、钱包、卫衣、牛仔裤。我们重视质量，追求合理的价格和长期合作。</p>
+    <p class="en">We are visiting factories to find reliable partners for ADV: trousers, belts, wallets, hoodies, jeans. Quality first, a fair price, and a relationship that lasts.</p>
+  </section>
+
+  <section class="verre carte apparait">
+    <span class="etiquette">和我们合作的好处 · What we bring you</span>
+    <div class="point"><span class="orbe" data-etat="travaille"></span><div><p class="zh"><strong>现成的买家。</strong>我们的产品直接卖给已经关注我们的社群，不用从零开始。</p><p class="en">Ready buyers: our products go straight to an audience that already follows us.</p></div></div>
+    <div class="point"><span class="orbe"></span><div><p class="zh"><strong>持续的订单。</strong>每一季都有新系列，卖得好的款式会返单。</p><p class="en">Regular orders: a new drop every season, and reorders on what sells.</p></div></div>
+    <div class="point"><span class="orbe"></span><div><p class="zh"><strong>简单的客户。</strong>清晰的技术资料、快速确认、按时付款、一个联系人。</p><p class="en">An easy client: clear tech packs, quick decisions, payment on time, one contact.</p></div></div>
+    <div class="point"><span class="orbe"></span><div><p class="zh"><strong>曝光度。</strong>经您同意，我们可以向数十万观众展示产品的制作过程。</p><p class="en">Visibility: with your agreement, we can show how the products are made to hundreds of thousands of viewers.</p></div></div>
+  </section>
+
+  <section class="verre carte apparait" style="text-align:center">
+    <span class="etiquette">找到我 · Find me</span>
+    <p style="font-size:18px;font-weight:600">Instagram · TikTok : @damien.rsl</p>
+    <p class="en">YouTube : Damien Roussel</p>
+    <p class="zh">谢谢您的时间，期待合作！</p>
+    <p class="en">Thank you for your time. We look forward to working together.</p>
+  </section>
+
+  <p class="pied">ADV · Damien Roussel · Paris</p>
+</main>
+
+<script>
+(function () {
+  var vu = function (el) { el.classList.add("vu"); };
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { vu(e.target); io.unobserve(e.target); } }); }, { threshold: 0.15 });
+    document.querySelectorAll(".apparait").forEach(function (el) { io.observe(el); });
+  } else { document.querySelectorAll(".apparait").forEach(vu); }
+  document.querySelectorAll("[data-n]").forEach(function (b) {
+    var fin = +b.getAttribute("data-n"), t0 = null;
+    function pas(t) { if (!t0) t0 = t; var k = Math.min(1, (t - t0) / 1400); b.textContent = Math.round(fin * (1 - Math.pow(1 - k, 3))); if (k < 1) requestAnimationFrame(pas); }
+    setTimeout(function () { requestAnimationFrame(pas); }, 300);
+  });
+})();
+</script>
+
+</body>
+</html>
